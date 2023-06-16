@@ -1,3 +1,5 @@
+# To run this code, import all of the neccessary packages with pip3 install <package name>, then run python3 HandMouse.py
+
 import cv2
 import mediapipe as mp
 import numpy as np

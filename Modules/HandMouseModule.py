@@ -1,3 +1,5 @@
+# Moving over the HandMouse.py to a module file, in progress.
+
 class HandMouse():
   def __init__(self, detector):
     self.detector = detector

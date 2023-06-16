@@ -1,3 +1,5 @@
+# This will be the main controller that triggers all the other features that will be in the modules folder.
+
 import cv2
 import mediapipe as mp
 import numpy as np
