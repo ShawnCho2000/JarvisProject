@@ -20,3 +20,5 @@ TODO
 2. Add differentiater for left and right hand (needed for todo 3)
 3. Use left hand the trigger certain modes (for example, put up index finger for mouse control, 5 fingers up to stop)
 4. Add more features!
+
+This project was highly inspired by this ![video](https://www.youtube.com/watch?v=01sAkU_NvOY)
