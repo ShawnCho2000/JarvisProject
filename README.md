@@ -6,9 +6,17 @@ Current Features
 
 Volume Control\
 ![](https://github.com/ShawnCho2000/JarvisProject/blob/main/Resources/VolumeControl.gif)\
-HandVolumeControl.py
+HandVolumeControl.py\
 
 
 Mouse\
 ![](https://github.com/ShawnCho2000/JarvisProject/blob/main/Resources/HandMouse.gif)\
-HandMouse.py
+(Please excuse the unintentional middle finger)
+HandMouse.py\
+
+
+TODO 
+1. Currently each of these features exist in its seperate python file. We need to modularize it so that it can be used in other python files (similar to HandTrackingModule.py
+2. Add differentiater for left and right hand (needed for todo 3)
+3. Use left hand the trigger certain modes (for example, put up index finger for mouse control, 5 fingers up to stop)
+4. Add more features!
