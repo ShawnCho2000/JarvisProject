@@ -5,8 +5,10 @@ Jarvis Project is a project inspired by Tony Stark's Jarvis AI that he is able t
 Current Features
 
 Volume Control
+![](https://github.com/ShawnCho2000/JarvisProject/blob/main/Resources/VolumeControl.gif)
 HandVolumeControl.py
 
 
 Mouse
+![](https://github.com/ShawnCho2000/JarvisProject/blob/main/Resources/HandMouse.gif)
 HandMouse.py
