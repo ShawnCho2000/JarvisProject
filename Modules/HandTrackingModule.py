@@ -16,7 +16,7 @@ class handDetector():
     self.hands = self.mpHands.Hands(self.mode, self.maxHands, 1, self.detectionCon, self.trackCon)
     self.mpDraw = mp.solutions.drawing_utils
 
-    # id's of each finger tip going from thumb to pinky.
+    # id's of eah finger tip going from thumb to pinky.
     self.tipIds = [4, 8, 12, 16, 20]
 
   def findHands(self, img, draw=True):
