@@ -23,7 +23,8 @@ while True:
   fps = 1/(cTime-pTime)
   pTime = cTime
   success, img = cap.read()
-  img = detector.findHands(img)
+  allHands, img = detector.findHands(img)
+  print(allHands)
   lmList, bbox = detector.findPosition(img, "right", draw=False)
   if len(lmList) > 0:
     # print(lmList[4], lmList[8])
@@ -37,8 +38,9 @@ while True:
 
     length = math.hypot(x2-x1, y2-y1)
     # print(length)
-    vol = length - 20
-    detector.setVolume(length - 20)
+    bboxHeight = bbox[3] - bbox[1]
+    vol = ((length) / bboxHeight) * 100
+    detector.setVolume(vol)
     if vol > 100:
       vol = 100
     if vol < 0:

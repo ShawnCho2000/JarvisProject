@@ -16,23 +16,60 @@ class handDetector():
     self.hands = self.mpHands.Hands(self.mode, self.maxHands, 1, self.detectionCon, self.trackCon)
     self.mpDraw = mp.solutions.drawing_utils
 
-    # id's of eah finger tip going from thumb to pinky.
+    # id's of each finger tip going from thumb to pinky.
     self.tipIds = [4, 8, 12, 16, 20]
 
-  def findHands(self, img, draw=True):
+
+  
+  def findHands(self, img, draw=True, flipType=True):
+    # returns: a list of Hands with handedness, img with labels if draw
+    
     imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     self.results = self.hands.process(imgRGB)
     # print(results.multi_hand_landmarks)
+    allHands = []
+    h, w, c = img.shape
 
+    if self.results.multi_hand_landmarks:
+      for handType, handLms in zip(self.results.multi_handedness, self.results.multi_hand_landmarks):
+        myHand = {}
+        mylmList = []
+        xList = []
+        yList = []
+        for id, lm in enumerate(handLms.landmark):
+           px, py, pz = int(lm.x * w), int(lm.y * h), int(lm.z * w)
+           mylmList.append([px, py, pz])
+           xList.append(px)
+           yList.append(py)
+        xmin, xmax = min(xList), max(xList)
+        ymin, ymax = min(yList), max(yList)
+        boxW, boxH = xmax - xmin, ymax - ymin
+        bbox = xmin, ymin, boxW, boxH
 
-    if draw:
-      if self.results.multi_hand_landmarks:
-        for handLms in self.results.multi_hand_landmarks:
+        if flipType:
+          if handType.classification[0].label == "Right":
+            myHand["type"] = "Left"
+          else:
+            myHand["type"] = "Right"
+        else:
+          myHand["type"] = handType.classification[0].label
+        allHands.append(myHand)
+        
+        if draw:
           self.mpDraw.draw_landmarks(img, handLms,
-          self.mpHands.HAND_CONNECTIONS)
-    return img
+              self.mpHands.HAND_CONNECTIONS)
+          cv2.rectangle(img, (bbox[0] - 20, bbox[1] - 20),
+                        (bbox[0] + bbox[2] + 20, bbox[1] + bbox[3] + 20), 
+                        (255, 0, 255), 2)
+          cv2.putText(img, myHand["type"], (bbox[0] - 30, bbox[1] - 30), cv2.FONT_HERSHEY_PLAIN,
+                      2, (255, 0, 255), 2)
+    
+    if draw:
+      return allHands, img
+    else:
+      return allHands
 
-  def findPosition(self, img, hand="right", handNo=0, draw = True):
+  def findPosition(self, img, hand="right", handNo=0, draw= True):
     xList = []
     yList = []
     bbox = []
@@ -89,6 +126,7 @@ class handDetector():
           length = math.hypot(x2 - x1, y2 - y1)
 
       return length, img, [x1, y1, x2, y2, cx, cy]
+  
   def setVolume(self, volume):
     applescript.AppleScript(f'set volume output volume {volume}').run()
 
@@ -99,7 +137,7 @@ def main():
     detector = handDetector()
     while True:
         success, img = cap.read()
-        img = detector.findHands(img)
+        img = detector.findHands(img, flipType=False)
         lmList, bbox = detector.findPosition(img)
         if len(lmList) != 0:
             print(lmList[4])
