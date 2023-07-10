@@ -24,8 +24,7 @@ while True:
   pTime = cTime
   success, img = cap.read()
   allHands, img = detector.findHands(img)
-  print(allHands)
-  lmList, bbox = detector.findPosition(img, "right", draw=False)
+  lmList, bbox = detector.findPosition(img, allHands, "Right", draw=False)
   if len(lmList) > 0:
     # print(lmList[4], lmList[8])
 

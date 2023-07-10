@@ -21,9 +21,9 @@ class handDetector():
 
 
   
-  def findHands(self, img, draw=True, flipType=True):
+  def findHands(self, img, draw=True, flipType=True, hand="Both"):
     # returns: a list of Hands with handedness, img with labels if draw
-    
+
     imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     self.results = self.hands.process(imgRGB)
     # print(results.multi_hand_landmarks)
@@ -63,19 +63,28 @@ class handDetector():
                         (255, 0, 255), 2)
           cv2.putText(img, myHand["type"], (bbox[0] - 30, bbox[1] - 30), cv2.FONT_HERSHEY_PLAIN,
                       2, (255, 0, 255), 2)
-    
+    print(allHands)
     if draw:
       return allHands, img
     else:
       return allHands
+    
 
-  def findPosition(self, img, hand="right", handNo=0, draw= True):
+  def findPosition(self, img, allHands, hand="Right", handNo=0, draw= False, flipType= True):
     xList = []
     yList = []
     bbox = []
     self.lmList = []
+
     if self.results.multi_hand_landmarks:
+      # Switches HandNo depending on ordering of lmList
+      if(hand != "Both" and allHands[0]["type"] != hand):
+        if (len(allHands) == 1):
+          return [], []
+        else:
+          handNo = 1
       myHand = self.results.multi_hand_landmarks[handNo]
+      
       for id, lm in enumerate(myHand.landmark):
         h, w, c = img.shape
         cx, cy = int(lm.x * w), int(lm.y * h)
@@ -90,7 +99,6 @@ class handDetector():
 
       if draw:
         cv2.rectangle(img, (xmin - 20, ymin - 20), (xmax + 20, ymax + 20), (0, 255, 0), 2)
-
     return self.lmList, bbox
 
   # returns an array of length 5, with 0 index representing the thumb, and 4 index representing the pinky.

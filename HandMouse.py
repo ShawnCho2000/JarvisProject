@@ -27,8 +27,8 @@ curX, curY = 0, 0
 
 while True:
   success, img = cap.read()
-  allhands, img = detector.findHands(img)
-  lmList, bbox = detector.findPosition(img, "right")
+  allHands, img = detector.findHands(img)
+  lmList, bbox = detector.findPosition(img, allHands, "Right")
   cv2.rectangle(img, (frameR, frameR), (wCam-frameR, hCam - frameR), (255, 0, 255), 2)
 
   if len(lmList) != 0:
