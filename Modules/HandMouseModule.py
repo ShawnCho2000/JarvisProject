@@ -1,6 +1,7 @@
 # Moving over the HandMouse.py to a module file, in progress.
 import numpy as np
 import math
+import cv2
 from screeninfo import get_monitors
 from pynput.mouse import Button, Controller
 
@@ -19,15 +20,18 @@ class HandMouse():
     self.curX = 0
     self.curY = 0
     self.wCam = 640
-    self.hCam = 640
+    self.hCam = 480
     self.secondary = "Left"
 
 
-  def mouseControl(self, lmList, handType):
+  def mouseControl(self, img, lmList, handType):
+
+    cv2.rectangle(img, (self.frameR, self.frameR), (self.wCam-self.frameR, self.hCam - self.frameR), (255, 0, 255), 2)
     if len(lmList[handType]) != 0:
       x1, y1 = lmList[handType][8][1:]
       x2, y2 = lmList[handType][12][1:]      
       # print(fingers)
+      
 
 
       x3 = np.interp(x2, (self.frameR, self.wCam - self.frameR),(0, self.wScr))
@@ -37,6 +41,7 @@ class HandMouse():
       self.curY = self.prevY + (y3 - self.prevY) / self.mouseSmooth
       self.mouse.position = (self.wScr-self.curX, self.curY)
       self.prevX, self.prevY = self.curX, self.curY
+      cv2.circle(img, (x2, y2), 15, (255, 0, 255), -1)
 
       # Defining the other secondary hand as clickFingers
       if (len(lmList["Left"])):
@@ -48,6 +53,8 @@ class HandMouse():
           self.mouse.press(Button.left)
         else:
           self.mouse.release(Button.left)
+
+    return img
 
   def mouseSignal(self,lmList, handType="Right"):
     if (len(lmList[handType]) > 0):

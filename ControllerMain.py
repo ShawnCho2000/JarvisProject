@@ -31,10 +31,9 @@ while True:
   lmList, bbox = detector.findPosition(img, draw=False)
 
   if (handVolume.volumeSignal(lmList, bbox, handType="Left")):
-    handVolume.volumeControl(lmList, bbox, handType="Right")
+    img = handVolume.volumeControl(img, lmList, bbox, handType="Right")
   elif(handMouse.mouseSignal(lmList, handType="Right")):
-    handMouse.mouseControl(lmList, handType="Right")
-
+    img = handMouse.mouseControl(img, lmList, handType="Right")
 
 
 
